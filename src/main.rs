@@ -15,7 +15,7 @@ fn main() {
         let command = input.trim();
 
         match command {
-            x  if x.to_string().contains("exit") => process::exit(0),
+            x  if x.to_string().contains("exit") => process::exit(command.chars().last()),
             _ => println!("{command}: command not found"),
         }
     }
