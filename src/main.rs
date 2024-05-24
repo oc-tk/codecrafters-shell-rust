@@ -54,7 +54,7 @@ fn handle_type_command(command: &str) {
         if let Some(path) = check_path_for_exec(&exec_command) {
             execute_binary(path.as_str());
         } else {
-            println!("{exec_command} not found")
+            println!("{exec_command} not found in path")
         }
     }
 }
