@@ -10,7 +10,7 @@ fn handle_exit_command(command: &str) {
             Err(e) => println!("Failed to parse the status code: {}", e),
         }
     } else {
-        println!("Failed to get last char of exit command (missing status code).");
+        print!("Failed to get last char of exit command (missing status code).");
     }
 }
 
