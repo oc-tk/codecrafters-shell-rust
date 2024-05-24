@@ -1,4 +1,4 @@
-
+use std::env;
 use std::process;
 use std::io::{self, Write};
 
@@ -50,7 +50,25 @@ fn handle_type_command(command: &str) {
     if let Some(_) = Command::from_str(&typeless_command) {
         println!("{typeless_command} is a shell builtin");
     } else {
-        println!("{typeless_command} not found")
+        if !check_path(&typeless_command) {
+            println!("{typeless_command} not found")
+        }
+    }
+}
+
+fn check_path(cmd: &str) -> bool {
+    match (env::var("PATH"), cmd) {
+        (Ok(paths), cmd) => {
+            for path in paths.split(':') {
+                let path = format!("{}/{}", path, cmd);
+                if std::path::Path::new(&path).exists() {
+                    println!("{} is in {}", cmd, path);
+                    return true;
+                }
+            }
+            false
+        }
+        _ => false,
     }
 }
 
