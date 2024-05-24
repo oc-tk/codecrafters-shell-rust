@@ -1,12 +1,7 @@
 #[allow(unused_imports)]
 use std::io::{self, Write};
 
-fn strip_trailing_newline(input: str) -> str {
-    input
-        .strip_suffix("\r\n")
-        .or(input.strip_suffix("\n"))
-        .unwrap_or(input)
-}
+
 
 fn main() {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -21,7 +16,9 @@ fn main() {
     let mut input = String::new();
     stdin.read_line(&mut input).unwrap();
 
-    let inputFormatted = strip_trailing_newline(input);
+    input.strip_suffix("\r\n")
+         .or(input.strip_suffix("\n"))
+         .unwrap_or(input)
 
     print!("{inputFormatted}: command not found");
 }
