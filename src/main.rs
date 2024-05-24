@@ -85,7 +85,7 @@ fn execute_binary(path: &str, arg: &str) {
         Ok(output) => {
             // Check the exit status
             if output.status.success() {
-                println!("{:?}", output);
+                println!("{:?}", output.stdout);
             } else {
                 println!("Command failed with exit code: {:?}", output.status.code());
             }
