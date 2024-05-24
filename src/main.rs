@@ -18,7 +18,5 @@ fn main() {
             x  if x.to_string().contains("exit") => process::exit(0),
             _ => println!("{command}: command not found"),
         }
-
-        println!("{command}: command not found"); 
     }
 }
