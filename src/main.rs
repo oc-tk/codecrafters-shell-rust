@@ -16,9 +16,9 @@ fn main() {
     let mut input = String::new();
     stdin.read_line(&mut input).unwrap();
 
-    input.strip_suffix("\r\n")
+    let inputFormatted = input.strip_suffix("\r\n")
          .or(input.strip_suffix("\n"))
          .unwrap();
 
-    print!("{input}: command not found");
+    print!("{inputFormatted}: command not found");
 }
