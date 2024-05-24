@@ -20,13 +20,13 @@ impl Command {
     }
 
     // Convert the Command enum to a &str
-    fn as_str(&self) -> &str {
-        match self {
-            Command::Echo => "echo",
-            Command::Type => "type",
-            Command::Exit => "exit",
-        }
-    }
+    // fn as_str(&self) -> &str {
+    //     match self {
+    //         Command::Echo => "echo",
+    //         Command::Type => "type",
+    //         Command::Exit => "exit",
+    //     }
+    // }
 }
 
 fn handle_exit_command(command: &str) {
