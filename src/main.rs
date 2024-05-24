@@ -18,7 +18,7 @@ fn main() {
 
     input.strip_suffix("\r\n")
          .or(input.strip_suffix("\n"))
-         .unwrap_or(input);
+         .unwrap();
 
     print!("{input}: command not found");
 }
