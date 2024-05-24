@@ -20,5 +20,5 @@ fn main() {
          .or(input.strip_suffix("\n"))
          .unwrap_or(input)
 
-    print!("{inputFormatted}: command not found");
+    print!("{input}: command not found");
 }
