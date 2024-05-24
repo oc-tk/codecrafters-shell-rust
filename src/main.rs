@@ -30,9 +30,9 @@ fn handle_matching(input: &str) {
     if let Some(command) = input.split_whitespace().next() {
         //normally interpreting first part of entry
         match command {
-            x  if x.to_string().contains("exit") => handle_exit_command(&command), //guard matching any "exit x" command where x stands for status code
-            x  if x.to_string().contains("echo") => handle_echo_command(&command), //guard matching any "echo x" command where x stands string to be printed
-            x  if x.to_string().contains("type") => handle_type_command(&command), //guard matching any "type x" command where x stands for string to be printed with specific type
+            x  if x.to_string().contains("exit") => handle_exit_command(&input), //guard matching any "exit x" command where x stands for status code
+            x  if x.to_string().contains("echo") => handle_echo_command(&input), //guard matching any "echo x" command where x stands string to be printed
+            x  if x.to_string().contains("type") => handle_type_command(&input), //guard matching any "type x" command where x stands for string to be printed with specific type
             _ => println!("{command}: command not found"), //default case where command is not implemented
         }
     } else {
