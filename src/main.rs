@@ -1,30 +1,31 @@
 use std::env;
 use std::process;
 use std::io::{self, Write};
+use std::process::Command;
 
-enum Command {
+enum Commands {
     Echo,
     Type,
     Exit,
 }
 
-impl Command {
-    // Convert a &str to a Command enum
-    fn from_str(command: &str) -> Option<Command> {
+impl Commands {
+    // Convert a &str to a Commands enum
+    fn from_str(command: &str) -> Option<Commands> {
         match command {
-            "echo" => Some(Command::Echo),
-            "type" => Some(Command::Type),
-            "exit" => Some(Command::Exit),
+            "echo" => Some(Commands::Echo),
+            "type" => Some(Commands::Type),
+            "exit" => Some(Commands::Exit),
             _ => None,
         }
     }
 
-    // Convert the Command enum to a &str
+    // Convert the Commands enum to a &str
     // fn as_str(&self) -> &str {
     //     match self {
-    //         Command::Echo => "echo",
-    //         Command::Type => "type",
-    //         Command::Exit => "exit",
+    //         Commands::Echo => "echo",
+    //         Commands::Type => "type",
+    //         Commands::Exit => "exit",
     //     }
     // }
 }
@@ -47,16 +48,40 @@ fn handle_echo_command(command: &str) {
 
 fn handle_type_command(command: &str) {
     let exec_command = command.replace("type ", "");
-    if let Some(_) = Command::from_str(&exec_command) {
+    if let Some(_) = Commands::from_str(&exec_command) {
         println!("{exec_command} is a shell builtin");
     } else {
-        if !check_path(&exec_command) {
+        if let Some(path) = check_path_for_exec(&exec_command) {
+            execute_binary(path.as_str());
+        } else {
             println!("{exec_command} not found")
         }
     }
 }
 
-fn check_path(executable: &str) -> bool {
+fn execute_binary(path: &str) {
+    // Define the command to execute
+    let output = Command::new(path) // Specify the path to the executable
+                         .output();                 // Execute the command and collect its output
+
+    // Handle the result
+    match output {
+        Ok(output) => {
+            // Check the exit status
+            if output.status.success() {
+                println!("{:?}", output);
+            } else {
+                println!("Command failed with exit code: {:?}", output.status.code());
+            }
+        }
+        Err(e) => {
+            // Print the error if execution failed
+            eprintln!("Error executing command: {}", e);
+        }
+    }
+}
+
+fn check_path_for_exec(executable: &str) -> Option<String> {
 
     if let Ok(paths) = env::var("PATH")
     {
@@ -64,56 +89,24 @@ fn check_path(executable: &str) -> bool {
             let path = format!("{path}/{executable}");
             if std::path::Path::new(&path).exists() {
                 println!("{executable} is in {path}");
-                return true;
+                return Some(path);
             }
         }
     }
-    false
-
-    // match (env::var("PATH"), executable) {
-    //     (Ok(paths), cmd) => {
-    //         for path in paths.split(':') {
-    //             let path = format!("{}/{}", path, cmd);
-    //             if std::path::Path::new(&path).exists() {
-    //                 println!("{} is in {}", cmd, path);
-    //                 return true;
-    //             }
-    //         }
-    //         false
-    //     }
-    //     _ => false,
-    // }
+    None
 }
 
 //handle pattern matching
 fn handle_matching(input: &str) {
-    if let Some(command) = Command::from_str(input.split_whitespace().next().unwrap()) {
+    if let Some(command) = Commands::from_str(input.split_whitespace().next().unwrap()) {
         match command {
-            Command::Echo => handle_echo_command(&input),
-            Command::Type => handle_type_command(&input),
-            Command::Exit => handle_exit_command(&input),
+            Commands::Echo => handle_echo_command(&input),
+            Commands::Type => handle_type_command(&input),
+            Commands::Exit => handle_exit_command(&input),
         }
     } else {
         println!("{input}: command not found")
     }
-
-    // if let Some(first_word) = input.split_whitespace().next() {
-        
-
-    //     //normally interpreting first part of entry
-    //     match command {
-    //         x  if x.to_string().contains("exit") => handle_exit_command(&input), //guard matching any "exit x" command where x stands for status code
-    //         x  if x.to_string().contains("echo") => handle_echo_command(&input), //guard matching any "echo x" command where x stands string to be printed
-    //         x  if x.to_string().contains("type") => handle_type_command(&input), //guard matching any "type x" command where x stands for string to be printed with specific type
-    //         _ => println!("{input}: command not found"), //default case where command is not implemented
-    //     }
-    // } else {
-    //     //case when someone inserts only one command which can be exit or nothing (for now)
-    //     match input {
-    //         x  if x.to_string().contains("exit") => handle_exit_command(&input), //guard matching any "exit x" command where x stands for status code
-    //         _ => println!("{input}: command not found"), //default case where command is not implemented
-    //     }
-    // }
     
 }
 
