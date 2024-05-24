@@ -15,8 +15,8 @@ fn handle_exit_command(command: &str) {
 }
 
 fn handle_echo_command(command: &str) {
-    let echo_less_command = command.trim().replace("echo ", "");
-    print!("{echo_less_command}");
+    let echo_less_command = command.replace("echo ", "");
+    println!("{echo_less_command}");
 }
 
 //handle pattern matching
