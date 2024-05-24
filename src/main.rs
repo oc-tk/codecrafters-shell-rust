@@ -41,35 +41,48 @@ fn handle_exit_command(command: &str) {
 }
 
 fn handle_echo_command(command: &str) {
-    let echoless_command = command.replace("echo ", "");
-    println!("{echoless_command}");
+    let exec_command = command.replace("echo ", "");
+    println!("{exec_command}");
 }
 
 fn handle_type_command(command: &str) {
-    let typeless_command = command.replace("type ", "");
-    if let Some(_) = Command::from_str(&typeless_command) {
-        println!("{typeless_command} is a shell builtin");
+    let exec_command = command.replace("type ", "");
+    if let Some(_) = Command::from_str(&exec_command) {
+        println!("{exec_command} is a shell builtin");
     } else {
-        if !check_path(&typeless_command) {
-            println!("{typeless_command} not found")
+        if !check_path(&exec_command) {
+            println!("{exec_command} not found")
         }
     }
 }
 
-fn check_path(cmd: &str) -> bool {
-    match (env::var("PATH"), cmd) {
-        (Ok(paths), cmd) => {
-            for path in paths.split(':') {
-                let path = format!("{}/{}", path, cmd);
-                if std::path::Path::new(&path).exists() {
-                    println!("{} is in {}", cmd, path);
-                    return true;
-                }
+fn check_path(executable: &str) -> bool {
+
+    if let Ok(paths) = env::var("PATH")
+    {
+        for path in paths.split(':') {
+            let path = format!("{}/{}", path, executable);
+            if std::path::Path::new(&path).exists() {
+                println!("{} is in {}", executable, path);
+                return true;
             }
-            false
         }
-        _ => false,
     }
+    false
+
+    // match (env::var("PATH"), executable) {
+    //     (Ok(paths), cmd) => {
+    //         for path in paths.split(':') {
+    //             let path = format!("{}/{}", path, cmd);
+    //             if std::path::Path::new(&path).exists() {
+    //                 println!("{} is in {}", cmd, path);
+    //                 return true;
+    //             }
+    //         }
+    //         false
+    //     }
+    //     _ => false,
+    // }
 }
 
 //handle pattern matching
