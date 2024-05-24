@@ -1,7 +1,6 @@
-#[allow(unused_imports)]
+
+use std::process;
 use std::io::{self, Write};
-
-
 
 fn main() {
     loop {
@@ -14,12 +13,12 @@ fn main() {
         stdin.read_line(&mut input).unwrap();
 
         let command = input.trim();
-        println!("{command}: command not found");
-    
-        // let lines = io::stdin().lines();
-        // for line in lines {
-        //     let command = line.unwrap();
-        //     println!("{command}: command not found");
-        // }   
+
+        match command {
+            x  if x.to_string().contains("exit") => process::exit(0),
+            _ => println!("{command}: command not found"),
+        }
+
+        println!("{command}: command not found"); 
     }
 }
