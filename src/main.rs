@@ -2,6 +2,15 @@
 use std::process;
 use std::io::{self, Write};
 
+fn handle_exit_command(command: &str) {
+    if let Some(last_char) = command.chars().last() {
+        match last_char.to_string().parse::<i32>() {
+            Ok(status) => process::exit(status),
+            Err(e) => println!("Failed to parse the status code: {}", e),
+        }
+    }
+}
+
 fn main() {
     loop {
         print!("$ ");
@@ -15,14 +24,7 @@ fn main() {
         let command = input.trim();
 
         match command {
-            x  if x.to_string().contains("exit") => {
-                if let Some(last_char) = command.chars().last() {
-                    match last_char.to_string().parse::<i32>() {
-                        Ok(status) => process::exit(status),
-                        Err(e) => println!("Failed to parse the status code: {}", e),
-                    }
-                }
-            },
+            x  if x.to_string().contains("exit") => handle_exit_command(&command),
             _ => println!("{command}: command not found"),
         }
     }
