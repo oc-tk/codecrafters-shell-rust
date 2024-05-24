@@ -53,7 +53,7 @@ fn handle_type_command(command: &str) {
     } else {
         if let Some(_) = check_path_for_exec(&exec_command) {
         } else {
-            println!("{exec_command} not found in path")
+            println!("{exec_command} not found")
         }
     }
 }
