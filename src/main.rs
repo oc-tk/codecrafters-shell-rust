@@ -26,12 +26,22 @@ fn handle_type_command(command: &str) {
 
 //handle pattern matching
 fn handle_matching(command: &str) {
-    match command {
-        x  if x.to_string().contains("exit") => handle_exit_command(&command), //guard matching any "exit x" command where x stands for status code
-        x  if x.to_string().contains("echo") => handle_echo_command(&command), //guard matching any "echo x" command where x stands string to be printed
-        x  if x.to_string().contains("type") => handle_type_command(&command), //guard matching any "type x" command where x stands for string to be printed with specific type
-        _ => println!("{command}: command not found"), //default case where command is not implemented
+    if let Some(command) = command.split_whitespace().next() {
+        //normally interpreting first part of entry
+        match command {
+            x  if x.to_string().contains("exit") => handle_exit_command(&command), //guard matching any "exit x" command where x stands for status code
+            x  if x.to_string().contains("echo") => handle_echo_command(&command), //guard matching any "echo x" command where x stands string to be printed
+            x  if x.to_string().contains("type") => handle_type_command(&command), //guard matching any "type x" command where x stands for string to be printed with specific type
+            _ => println!("{command}: command not found"), //default case where command is not implemented
+        }
+    } else {
+        //case when someone inserts only one command which can be exit or nothing (for now)
+        match command {
+            x  if x.to_string().contains("exit") => handle_exit_command(&command), //guard matching any "exit x" command where x stands for status code
+            _ => println!("{command}: command not found"), //default case where command is not implemented
+        }
     }
+    
 }
 
 fn main() {
