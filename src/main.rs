@@ -20,7 +20,7 @@ fn handle_echo_command(command: &str) {
 }
 
 fn handle_type_command(command: &str) {
-    let typeless_command = command.replace("type ", "");
+    let typeless_command = command.trim().replace("type ", "");
     println!("{typeless_command} is a shell builtin");
 }
 
