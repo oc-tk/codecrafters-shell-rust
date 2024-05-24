@@ -51,18 +51,34 @@ fn handle_type_command(command: &str) {
     if let Some(_) = Commands::from_str(&exec_command) {
         println!("{exec_command} is a shell builtin");
     } else {
-        if let Some(path) = check_path_for_exec(&exec_command) {
-            execute_binary(path.as_str());
+        if let Some(_) = check_path_for_exec(&exec_command) {
         } else {
             println!("{exec_command} not found in path")
         }
     }
 }
 
-fn execute_binary(path: &str) {
+fn check_path_for_exec(executable: &str) -> Option<String> {
+
+    if let Ok(paths) = env::var("PATH")
+    {
+        for path in paths.split(':') {
+            let path = format!("{path}/{executable}");
+            if std::path::Path::new(&path).exists() {
+                println!("{executable} is in {path}");
+                return Some(path);
+            }
+        }
+    }
+
+    None
+}
+
+fn execute_binary(path: &str, arg: &str) {
     // Define the command to execute
     let output = Command::new(path) // Specify the path to the executable
-                         .output();                 // Execute the command and collect its output
+                                                .arg(arg)
+                                                .output();                 // Execute the command and collect its output
 
     // Handle the result
     match output {
@@ -81,19 +97,18 @@ fn execute_binary(path: &str) {
     }
 }
 
-fn check_path_for_exec(executable: &str) -> Option<String> {
 
-    if let Ok(paths) = env::var("PATH")
-    {
-        for path in paths.split(':') {
-            let path = format!("{path}/{executable}");
-            if std::path::Path::new(&path).exists() {
-                println!("{executable} is in {path}");
-                return Some(path);
-            }
+fn handle_execution_or_unsupported(path: &str)
+{
+    let command:Vec<&str> = path.split_whitespace().collect();
+    if command.len() > 0 {
+        if std::path::Path::new(command[0]).exists() {
+            execute_binary(command[0], command[1])
         }
     }
-    None
+    else {
+        println!("{path}: command not found")
+    }
 }
 
 //handle pattern matching
@@ -105,7 +120,8 @@ fn handle_matching(input: &str) {
             Commands::Exit => handle_exit_command(&input),
         }
     } else {
-        println!("{input}: command not found")
+        handle_execution_or_unsupported(input);
+        //todo handle exec
     }
     
 }
