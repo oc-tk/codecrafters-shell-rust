@@ -10,7 +10,13 @@ fn main() {
     // Wait for user input
     let stdin = io::stdin();
     let mut input = String::new();
-    stdin.read_line(&mut input).unwrap();
+    //stdin.read_line(&mut input).unwrap();
+
+    let lines = io::stdin().lines();
+    for line in lines {
+        let command = input.trim();
+        println!("{command}: command not found");
+    }
 
     let command = input.trim();
     println!("{command}: command not found");
