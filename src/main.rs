@@ -8,16 +8,13 @@ fn main() {
     io::stdout().flush().unwrap();
 
     // Wait for user input
-    let stdin = io::stdin();
-    let mut input = String::new();
+    //let stdin = io::stdin();
+    // let mut input = String::new();
     //stdin.read_line(&mut input).unwrap();
 
     let lines = io::stdin().lines();
     for line in lines {
-        let command = input.trim();
+        let command = line.unwrap();
         println!("{command}: command not found");
     }
-
-    let command = input.trim();
-    println!("{command}: command not found");
 }
