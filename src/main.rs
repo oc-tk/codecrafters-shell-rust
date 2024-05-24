@@ -61,9 +61,9 @@ fn check_path(executable: &str) -> bool {
     if let Ok(paths) = env::var("PATH")
     {
         for path in paths.split(':') {
-            let path = format!("{}/{}", path, executable);
+            let path = format!("{path}/{executable}");
             if std::path::Path::new(&path).exists() {
-                println!("{} is in {}", executable, path);
+                println!("{executable} is in {path}");
                 return true;
             }
         }
